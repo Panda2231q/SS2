@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naročilo uspešno</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(to right, #2563eb, #7c3aed);
+        }
+        
+        .success-icon {
+            font-size: 80px;
+            color: #10b981;
+            margin-bottom: 20px;
+            animation: bounce 1s ease-in-out;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #1e293b;
+            background: linear-gradient(to right, #2563eb, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        p {
+            font-size: 1.2rem;
+            color: #64748b;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .order-details {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 25px 0;
+            text-align: left;
+            border-left: 4px solid #2563eb;
+        }
+        
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .detail-value {
+            color: #475569;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(to right, #2563eb, #7c3aed);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-top: 20px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        }
+        
+        .btn i {
+            margin-right: 8px;
+        }
+        
+        .contact-info {
+            margin-top: 30px;
+            font-size: 1rem;
+            color: #64748b;
+        }
+        
+        .contact-info a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+        
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-20px);}
+            60% {transform: translateY(-10px);}
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            p {
+                font-size: 1rem;
+            }
+            
+            .btn {
+                padding: 12px 25px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-icon">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <h1>Hvala za vaše naročilo!</h1>
+        <p>Vaše naročilo je bilo uspešno sprejeto. Prejeli boste potrditev na vaš e-poštni naslov v naslednjih minutah.</p>
+        
+        <div class="order-details" id="orderDetails">
+            <div class="detail-item">
+                <span class="detail-label">Številka naročila:</span>
+                <span class="detail-value" id="orderNumber">Nalaganje...</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Status:</span>
+                <span class="detail-value" id="orderStatus">V obdelavi</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Skupni znesek:</span>
+                <span class="detail-value" id="orderTotal">Nalaganje...</span>
+            </div>
+        </div>
+        
+        <p>Naš tim bo kmalu stopil v stik z vami za potrditev podrobnosti vašega projekta.</p>
+        
+        <a href="index.html" class="btn">
+            <i class="fas fa-home"></i> Nazaj na domačo stran
+        </a>
+        
+        <div class="contact-info">
+            Če imate kakršnakoli vprašanja, nas kontaktirajte na 
+            <a href="mailto:podpora@tvojedomena.com">podpora@tvojedomena.com</a>
+        </div>
+    </div>
+
+    <script>
+        // EmailJS konfiguracija - ZAMENJAJTE s svojimi podatki!
+        emailjs.init('lPyooN4q-pmrWZrt3');
+        
+        window.onload = function() {
+            const orderData = JSON.parse(localStorage.getItem('orderData'));
+            
+            if (orderData) {
+                // Prikaži podrobnosti naročila
+                document.getElementById('orderNumber').textContent = '#' + Math.floor(100000 + Math.random() * 900000);
+                document.getElementById('orderTotal').textContent = orderData.total.toFixed(2) + '€';
+                
+                // Pošlji e-poštno obvestilo
+                emailjs.send('service_iwbptde', 'template_e5gtkfp', {
+                    from_name: orderData.clientName,
+                    from_email: orderData.clientEmail,
+                    project_name: orderData.projectName,
+                    package: orderData.package === 'basic' ? 'Osnovni Paket' : 'Profesionalni Paket',
+                    addons: orderData.addons.join(', ') || 'Brez dodatkov',
+                    total: orderData.total.toFixed(2) + '€',
+                    discount: orderData.discount.toFixed(2) + '€'
+                }).then(
+                    function() {
+                        console.log('E-poštno obvestilo uspešno poslano');
+                        document.getElementById('orderStatus').textContent = 'Potrjeno';
+                        document.getElementById('orderStatus').style.color = '#10b981';
+                        document.getElementById('orderStatus').style.fontWeight = '600';
+                    },
+                    function(error) {
+                        console.error('Napaka pri pošiljanju e-pošte:', error);
+                        document.getElementById('orderStatus').textContent = 'Napaka pri obveščanju';
+                        document.getElementById('orderStatus').style.color = '#ef4444';
+                    }
+                );
+                
+                // Pošlji podatke na strežnik (simulacija)
+                setTimeout(() => {
+                    fetch('https://tvoj-streznik.com/api/orders', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(orderData)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            console.log('Naročilo uspešno shranjeno na strežnik');
+                        } else {
+                            console.error('Napaka pri shranjevanju na strežnik');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Napaka pri povezavi s strežnikom:', error);
+                    });
+                }, 2000);
+                
+                // Počisti lokalni pomnilnik po 10 sekundah
+                setTimeout(() => {
+                    localStorage.removeItem('orderData');
+                }, 10000);
+            } else {
+                // Če ni podatkov o naročilu, preusmeri na glavno stran
+                document.getElementById('orderDetails').innerHTML = `
+                    <div style="text-align: center; padding: 20px;">
+                        <i class="fas fa-exclamation-triangle" style="color: #ef4444; font-size: 40px; margin-bottom: 15px;"></i>
+                        <p style="color: #ef4444; font-weight: 500;">Ni podatkov o naročilu. Morda niste dokončali postopka naročila.</p>
+                    </div>
+                `;
+                
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 5000);
+            }
+        };
+    </script>
+</body>
+</html>
